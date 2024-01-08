@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hello.hellospring.carInfo.mapper.CarMapper">
+
+    <select id="HomeListCar" resultType="hello.hellospring.carInfo.domain.CarList">
+        SELECT master_car.car_code
+             , master_car.master_car_name
+             , master_car.master_car_order
+             , master_car.master_car_recommend
+             , car_price.car_lease_price
+             , car_price.car_rent_price
+             , car_img.car_img
+             , car_img.car_brand_img
+          FROM master_car
+          LEFT OUTER JOIN car_price
+            ON master_car.car_code = car_price.car_code
+          LEFT OUTER JOIN car_img
+            ON master_car.car_code = car_img.car_code
+         ORDER BY master_car.master_car_order ASC
+        LIMIT 18;
+
+    </select>
+
+    <select id="RecommendListCar" resultType="hello.hellospring.carInfo.domain.CarRecommendList">
+        SELECT
+        master_car.*,
+        car_price.car_lease_price,
+        car_price.car_rent_price,
+        car_img.car_img,
+        car_img.car_brand_img
+        FROM
+        master_car
+        LEFT OUTER JOIN
+        car_price ON master_car.car_code = car_price.car_code
+        LEFT OUTER JOIN
+        car_img ON master_car.car_code = car_img.car_code
+        WHERE
+        master_car.master_car_recommend = true
+        ORDER BY
+        master_car.master_car_order ASC
+    </select>
+
+    <select id="DetailListCar" resultType="hello.hellospring.carInfo.domain.CarDetailList">
+        SELECT
+        master_car.*,
+        car_price.car_lease_price,
+        car_price.car_rent_price,
+        car_img.car_img,
+        car_img.car_brand_img,
+        car_trim.car_trim_name,
+        car_trim.car_trim_price,
+        car_option.car_option,
+        car_option.car_option_lease_price
+        FROM
+        master_car
+        LEFT OUTER JOIN
+        car_price ON master_car.car_code = car_price.car_code
+        LEFT OUTER JOIN
+        car_img ON master_car.car_code = car_img.car_code
+        LEFT OUTER JOIN
+        car_trim ON master_car.car_code = car_trim.car_code
+        LEFT OUTER JOIN
+        car_option ON master_car.car_code = car_option.car_code
+        WHERE
+        master_car.master_car_name= #{Car_Name};
+    </select>
+
+
+    <update id="UpdateCarOrder">
+        UPDATE master_car
+         SET master_car_order = ${Car_Order}
+         WHERE car_code = ${Car_Code}
+    </update>
+
+    <update id="UpdateRecommendCar">
+        UPDATE master_car
+        SET master_car_recommend  = not master_car_recommend
+        WHERE car_code = ${Car_Code};
+    </update>
+</mapper>
+
