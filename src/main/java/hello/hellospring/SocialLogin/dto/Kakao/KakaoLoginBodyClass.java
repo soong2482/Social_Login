@@ -1,9 +1,9 @@
-package hello.hellospring.SocialLogin.dto;
+package hello.hellospring.SocialLogin.dto.Naver;
 
 import lombok.Data;
 
 @Data
-public class LoginBodyClass {
+public class NaverLoginBodyClass {
     private String grantType;
     private String clientId;
     private String clientSecret;
